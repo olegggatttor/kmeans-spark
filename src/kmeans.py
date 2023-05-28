@@ -21,6 +21,11 @@ if __name__ == '__main__':
     parser.add_argument("max_iter", default=5)
     args = parser.parse_args()
 
-    spark = SparkSession.builder.appName("openfood-trainer").getOrCreate()
+    spark = SparkSession.builder \
+        .master("local[*]") \
+        .config("spark.driver.cores", "2") \
+        .config("spark.driver.memory", "4g") \
+        .config("spark.executor.memory", "10g") \
+        .appName("openfood-trainer").getOrCreate()
 
     main(spark, args.train_path, args.save_path, {"k": args.k, "max_iter": args.max_iter})
